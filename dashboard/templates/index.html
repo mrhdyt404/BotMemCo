@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemeCoin ML Trend & Prediction Bot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background-glob"></div>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="navbar">
+            <div class="brand">
+                <div class="logo-icon">🚀</div>
+                <div>
+                    <h1>MEME<span>BOT</span> ML</h1>
+                    <p class="subtitle">Real-Time X & Telegram Meme Coin Pump Predictor</p>
+                </div>
+            </div>
+            <div class="status-bar">
+                <div class="status-badge live">
+                    <span class="dot"></span> LIVE SCANNER
+                </div>
+                <div class="status-badge ml-info">
+                    🧠 ML Samples Trained: <strong id="ml-sample-count">0</strong>
+                </div>
+            </div>
+        </header>
+
+        <!-- DEX Screener Live Marquee Ticker -->
+        <div class="dexscreener-marquee-container">
+            <div class="marquee-tag">⚡ DEX SCREENER REALTIME</div>
+            <div class="marquee-wrapper">
+                <div class="marquee-content" id="marquee-content">
+                    <span class="marquee-item">Loading DEX Screener Live Prices...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Metrics Stats -->
+        <section class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <span class="stat-label">Monitored Meme Coins</span>
+                    <h2 class="stat-value" id="monitored-count">15 Tokens</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-content">
+                    <span class="stat-label">Top Pump Prediction</span>
+                    <h2 class="stat-value highlight" id="top-coin-name">Loading...</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌐</div>
+                <div class="stat-content">
+                    <span class="stat-label">Data Sources</span>
+                    <h2 class="stat-value">Platform X + Telegram</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔄</div>
+                <div class="stat-content">
+                    <span class="stat-label">Self-Learning Engine</span>
+                    <h2 class="stat-value online">SGD + Continuous ML</h2>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Layout -->
+        <div class="dashboard-grid">
+            <!-- Left Panel: Ranking Predictions Table -->
+            <main class="panel ranking-panel">
+                <div class="panel-header">
+                    <h2>🔥 Predicted Meme Coin Pump Rankings</h2>
+                    <div class="controls">
+                        <button id="refresh-btn" class="btn-primary">⚡ Refresh Predictions</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="prediction-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Coin</th>
+                                <th>Pump Prob (%)</th>
+                                <th>Recommendation</th>
+                                <th>1h Vol</th>
+                                <th>24h Vol</th>
+                                <th>Vol Velocity</th>
+                                <th>Avg Sent</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prediction-tbody">
+                            <tr>
+                                <td colspan="8" class="loading-td">Analyzing posts from X and Telegram...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+
+            <!-- Right Panel: Live Feed & ML Learning Log -->
+            <aside class="sidebar-layout">
+                <!-- Search & Instant Predictor -->
+                <div class="panel search-panel">
+                    <h3>🔍 Token Inspector</h3>
+                    <div class="search-box">
+                        <input type="text" id="token-input" placeholder="Type ticker e.g. PEPE, DOGE, WIF...">
+                        <button id="search-btn" class="btn-secondary">Check ML</button>
+                    </div>
+                    <div id="search-result" class="search-result-box hidden"></div>
+                </div>
+
+                <!-- Live Social Post Feed -->
+                <div class="panel feed-panel">
+                    <h3>💬 Live Social Ingestion Feed</h3>
+                    <div id="post-feed" class="feed-scroll">
+                        <p class="feed-placeholder">Waiting for incoming social posts...</p>
+                    </div>
+                </div>
+
+                <!-- Continuous Learning Logs -->
+                <div class="panel ml-log-panel">
+                    <h3>🧠 ML Self-Learning Log</h3>
+                    <ul id="ml-log-list" class="log-list">
+                        <li>System initialized. Listening for feedback loops.</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>

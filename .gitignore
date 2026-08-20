@@ -1,0 +1,29 @@
+# Environment & Secret variables (DO NOT PUSH)
+.env
+*.env
+
+# SQLite Database
+*.db
+*.sqlite
+*.sqlite3
+
+# ML Model Pickles & Cache
+models/*.pkl
+models/*.joblib
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.swp
+.DS_Store
