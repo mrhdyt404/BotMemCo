@@ -342,7 +342,8 @@ body {
 }
 
 .prediction-table {
-    width: max-content;
+    width: 100%;
+    min-width: 600px;
     border-collapse: collapse;
     text-align: left;
 }
@@ -680,27 +681,65 @@ body {
         text-align: center;
     }
 
-    .prediction-table th, 
+    /* Responsive Card Table for Mobile (< 640px) */
+    .prediction-table {
+        min-width: 100%;
+        display: block;
+    }
+
+    .prediction-table thead {
+        display: none;
+    }
+
+    .prediction-table tbody {
+        display: block;
+    }
+
+    .prediction-table tr {
+        display: block;
+        background: rgba(18, 26, 43, 0.6);
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        margin-bottom: 12px;
+        padding: 12px 14px;
+    }
+
     .prediction-table td {
-        padding: 10px 10px;
-        font-size: 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+        text-align: right;
+    }
+
+    .prediction-table td:last-child {
+        border-bottom: none;
+    }
+
+    .prediction-table td::before {
+        content: attr(data-label);
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
     }
 
     .coin-cell {
-        font-size: 0.95rem;
+        font-size: 1.1rem;
     }
 
     .pump-bar-bg {
-        width: 60px;
+        width: 80px;
     }
 
     .pump-text {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
     }
 
     .badge {
-        padding: 4px 8px;
-        font-size: 0.7rem;
+        padding: 4px 10px;
+        font-size: 0.75rem;
     }
 
     /* Search Box Mobile */

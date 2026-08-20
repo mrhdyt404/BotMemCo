@@ -49,9 +49,9 @@ async function fetchTrendingPredictions() {
                 const velSign = pred.volume_velocity >= 0 ? "+" : "";
 
                 tr.innerHTML = `
-                    <td>#${index + 1}</td>
-                    <td class="coin-cell">$${pred.token_symbol}</td>
-                    <td>
+                    <td data-label="Rank">#${index + 1}</td>
+                    <td data-label="Coin" class="coin-cell">$${pred.token_symbol}</td>
+                    <td data-label="Pump Prob">
                         <div class="pump-bar-container">
                             <div class="pump-bar-bg">
                                 <div class="pump-bar-fill" style="width: ${pred.pump_score}%"></div>
@@ -59,13 +59,13 @@ async function fetchTrendingPredictions() {
                             <span class="pump-text">${pred.pump_score}%</span>
                         </div>
                     </td>
-                    <td><span class="badge ${badgeClass}">${pred.recommendation}</span></td>
-                    <td>${pred.post_count_1h}</td>
-                    <td>${pred.post_count_24h}</td>
-                    <td style="color: ${pred.volume_velocity >= 0 ? 'var(--accent-green)' : 'var(--accent-pink)'}">
+                    <td data-label="Recommendation"><span class="badge ${badgeClass}">${pred.recommendation}</span></td>
+                    <td data-label="1h Vol">${pred.post_count_1h}</td>
+                    <td data-label="24h Vol">${pred.post_count_24h}</td>
+                    <td data-label="Vol Velocity" style="color: ${pred.volume_velocity >= 0 ? 'var(--accent-green)' : 'var(--accent-pink)'}">
                         ${velSign}${Math.round(pred.volume_velocity * 100)}%
                     </td>
-                    <td>${pred.avg_sentiment > 0 ? '+' : ''}${pred.avg_sentiment.toFixed(2)}</td>
+                    <td data-label="Avg Sent">${pred.avg_sentiment > 0 ? '+' : ''}${pred.avg_sentiment.toFixed(2)}</td>
                 `;
                 tbody.appendChild(tr);
             });
