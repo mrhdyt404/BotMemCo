@@ -520,3 +520,219 @@ body {
     padding: 6px 0;
     border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
 }
+
+/* ==========================================================================
+   RESPONSIVE DESIGN SYSTEM (Desktop, Laptop, Tablet, Mobile)
+   ========================================================================== */
+
+/* Custom Scrollbar for Table & Feed */
+.table-container::-webkit-scrollbar,
+.feed-scroll::-webkit-scrollbar,
+.log-list::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+}
+
+.table-container::-webkit-scrollbar-track,
+.feed-scroll::-webkit-scrollbar-track,
+.log-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb,
+.feed-scroll::-webkit-scrollbar-thumb,
+.log-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover,
+.feed-scroll::-webkit-scrollbar-thumb:hover,
+.log-list::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-cyan);
+}
+
+/* Large Screens & Laptops (max-width: 1200px) */
+@media (max-width: 1200px) {
+    .app-container {
+        padding: 16px;
+    }
+
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+}
+
+/* Tablets (max-width: 900px) */
+@media (max-width: 900px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px;
+    }
+
+    .status-bar {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .panel {
+        padding: 16px;
+        border-radius: 12px;
+    }
+}
+
+/* Mobile Devices (max-width: 600px) */
+@media (max-width: 600px) {
+    .app-container {
+        padding: 10px;
+    }
+
+    .brand {
+        gap: 10px;
+    }
+
+    .logo-icon {
+        font-size: 1.5rem;
+        padding: 6px;
+    }
+
+    .brand h1 {
+        font-size: 1.25rem;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
+    }
+
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+
+    /* Marquee Banner Mobile */
+    .dexscreener-marquee-container {
+        height: 38px;
+        margin-bottom: 16px;
+    }
+
+    .marquee-tag {
+        font-size: 0.65rem;
+        padding: 0 10px;
+    }
+
+    .marquee-item {
+        font-size: 0.75rem;
+        gap: 6px;
+    }
+
+    /* Stats Grid Mobile (2 Columns) */
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .stat-card {
+        padding: 12px;
+        gap: 10px;
+        border-radius: 12px;
+    }
+
+    .stat-icon {
+        font-size: 1.4rem;
+        padding: 8px;
+        border-radius: 8px;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+    }
+
+    .stat-value {
+        font-size: 1.05rem;
+    }
+
+    /* Panel Headers & Tables Mobile */
+    .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .panel h2, .panel h3 {
+        font-size: 1.05rem;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    .prediction-table th, 
+    .prediction-table td {
+        padding: 10px 10px;
+        font-size: 0.8rem;
+    }
+
+    .coin-cell {
+        font-size: 0.95rem;
+    }
+
+    .pump-bar-bg {
+        width: 60px;
+    }
+
+    .pump-text {
+        font-size: 0.75rem;
+    }
+
+    .badge {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+
+    /* Search Box Mobile */
+    .search-box {
+        flex-direction: row;
+        gap: 6px;
+    }
+
+    .search-box input {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+    }
+
+    .btn-secondary {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+}
+
+/* Extra Small Phones (max-width: 380px) */
+@media (max-width: 380px) {
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .status-bar {
+        flex-direction: column;
+    }
+
+    .status-badge {
+        width: 100%;
+        justify-content: center;
+    }
+}
