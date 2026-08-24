@@ -233,6 +233,15 @@ class DatabaseManager:
             cursor.execute("SELECT * FROM model_logs ORDER BY timestamp DESC LIMIT ?", (limit,))
             return [dict(row) for row in cursor.fetchall()]
 
+    def insert_model_log(self, version: str, accuracy: float, samples_trained: int, notes: str):
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO model_logs (version, accuracy, samples_trained, notes)
+                VALUES (?, ?, ?, ?)
+            """, (version, accuracy, samples_trained, notes))
+            conn.commit()
+
     def insert_wishlist(self, token_symbol: str, entry_price: float, entry_price_str: str,
                         pump_score: float, recommendation: str, target_gain: str,
                         target_ratio: float, timeframe: str, timeframe_days: int,

@@ -232,7 +232,7 @@ async def get_wishlist():
             if fed_to_ml == 0:
                 # Ground truth label = 1 (Pump Success)
                 feat = feature_pipeline.compute_token_features(token)
-                ml_manager.update_online([feat], [1])
+                ml_manager.update_online(feat, 1)
                 db.insert_model_log("1.5.0", 1.0, ml_manager.samples_seen, 
                                    f"Wishlist verification for ${token}: PUMP CONFIRMED (+{highest_gain_pct}% gain). ML model updated with positive sample.")
                 fed_to_ml = 1
@@ -240,12 +240,26 @@ async def get_wishlist():
         else:
             db.update_wishlist_verification(item["id"], status, highest_price, current_gain_pct, fed_to_ml=fed_to_ml)
 
-        item_dict = dict(item)
-        item_dict["current_price_str"] = current_price_str
-        item_dict["current_gain_pct"] = current_gain_pct
-        item_dict["highest_gain_pct"] = highest_gain_pct
-        item_dict["status"] = status
-        item_dict["fed_to_ml"] = fed_to_ml
+        item_dict = {
+            "id": int(item["id"]),
+            "token_symbol": str(item["token_symbol"]),
+            "entry_price": float(item["entry_price"] or 0.0),
+            "entry_price_str": str(item["entry_price_str"] or "$0.00"),
+            "pump_score": float(item["pump_score"] or 0.0),
+            "recommendation": str(item["recommendation"] or "STRONG BUY 🚀"),
+            "target_gain": str(item["target_gain"] or "+50%"),
+            "target_ratio": float(item["target_ratio"] or 1.50),
+            "timeframe": str(item["timeframe"] or "1-3 Hari"),
+            "timeframe_days": int(item["timeframe_days"] or 3),
+            "keterangan_awam": str(item["keterangan_awam"] or ""),
+            "created_at": str(item["created_at"] or ""),
+            "target_deadline": str(item["target_deadline"] or ""),
+            "current_price_str": str(current_price_str),
+            "current_gain_pct": float(current_gain_pct),
+            "highest_gain_pct": float(highest_gain_pct),
+            "status": str(status),
+            "fed_to_ml": int(fed_to_ml)
+        }
         processed_items.append(item_dict)
 
     return {"status": "ok", "wishlist": processed_items}
@@ -272,7 +286,7 @@ async def simulate_wishlist_pump(wishlist_id: int):
     
     # Train ML Model with ground-truth positive label = 1
     feat = feature_pipeline.compute_token_features(token)
-    ml_manager.update_online([feat], [1])
+    ml_manager.update_online(feat, 1)
     db.insert_model_log("1.5.0", 1.0, ml_manager.samples_seen, 
                        f"Simulated verification for ${token}: PUMP CONFIRMED (+{simulated_gain_pct}% gain). ML model updated with positive label=1.")
     
