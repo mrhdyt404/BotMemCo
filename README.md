@@ -145,49 +145,6 @@ Fitur-fitur numerik yang diekstrak dari postingan media sosial untuk dilatih ole
   - Setelah jeda waktu, sistem memeriksa apakah volume/sentimen koin tersebut benar-benar meningkat (Label = 1) atau tidak (Label = 0).
   - Melakukan pembaruan model secara otomatis dan mencatat akurasi di tabel `model_logs`.
 
----
-
-## 🗄️ Skema Database (`crypto_meme_bot.db`)
-
-```sql
--- Tabel Postingan Mentah
-CREATE TABLE posts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    platform TEXT NOT NULL,         -- 'X' atau 'Telegram'
-    post_id TEXT,
-    author TEXT,
-    content TEXT NOT NULL,
-    token_symbol TEXT NOT NULL,
-    sentiment_score REAL DEFAULT 0.0,
-    likes INTEGER DEFAULT 0,
-    retweets INTEGER DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Tabel Prediksi ML
-CREATE TABLE predictions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    token_symbol TEXT NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    pump_score REAL NOT NULL,        -- Probabilitas Pump (0.0 - 1.0)
-    confidence REAL DEFAULT 0.0,    -- Tingkat Kepercayaan Model
-    recommendation TEXT,            -- 'STRONG BUY', 'BULLISH', 'NEUTRAL', 'BEARISH'
-    features_json TEXT
-);
-
--- Tabel Continuous Self-Learning Log
-CREATE TABLE model_logs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    version TEXT NOT NULL,
-    accuracy REAL,
-    samples_trained INTEGER,
-    notes TEXT
-);
-```
-
----
-
 ## ⚡ Cara Menjalankan Bot
 
 ### 1. Persyaratan Sistem
