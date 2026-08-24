@@ -15,6 +15,8 @@ from engine.feature_pipeline import FeaturePipeline
 from ml.model_manager import MemeCoinMLManager
 from ml.continuous_learner import ContinuousLearner
 
+from engine.historical_analyzer import HistoricalPatternAnalyzer
+
 class TestMemeCoinBot(unittest.TestCase):
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
@@ -24,6 +26,7 @@ class TestMemeCoinBot(unittest.TestCase):
         self.sentiment = CryptoSentimentAnalyzer()
         self.feature_pipeline = FeaturePipeline(self.db)
         self.ml = MemeCoinMLManager(model_dir=os.path.join(self.test_dir, "models"))
+        self.hist_analyzer = HistoricalPatternAnalyzer()
 
     def tearDown(self):
         shutil.rmtree(self.test_dir, ignore_errors=True)
@@ -78,6 +81,19 @@ class TestMemeCoinBot(unittest.TestCase):
         initial_samples = self.ml.samples_seen
         self.ml.update_online(features, actual_label=1)
         self.assertEqual(self.ml.samples_seen, initial_samples + 1)
+
+    def test_historical_pattern_analysis(self):
+        features_bullish = {
+            "post_count_1h": 20,
+            "post_count_24h": 150,
+            "volume_velocity": 1.8,
+            "avg_sentiment": 0.55,
+            "bullish_ratio": 0.85
+        }
+        res = self.hist_analyzer.evaluate_token(features_bullish, pump_score=85.0)
+        self.assertIn("+100%+", res["target_gain"])
+        self.assertEqual(res["timeframe"], "1 - 2 Minggu Ke Depan")
+        self.assertIn("Sangat Bullish", res["keterangan_awam"])
 
 if __name__ == "__main__":
     unittest.main()

@@ -343,7 +343,7 @@ body {
 
 .prediction-table {
     width: 100%;
-    min-width: 600px;
+    min-width: 1050px;
     border-collapse: collapse;
     text-align: left;
 }
@@ -773,5 +773,204 @@ body {
     .status-badge {
         width: 100%;
         justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   RECOMMENDATIONS SECTION & CARDS
+   ========================================================================== */
+.recommendations-section {
+    margin-bottom: 28px;
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.05), rgba(79, 172, 254, 0.02));
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.section-title-box {
+    margin-bottom: 18px;
+}
+
+.section-title-box h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 18px;
+}
+
+.rec-card {
+    background: rgba(18, 26, 43, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.rec-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 10px 30px rgba(0, 242, 254, 0.25);
+}
+
+.rec-card.rec-rank-1 {
+    border-color: rgba(0, 230, 118, 0.5);
+    background: linear-gradient(135deg, rgba(0, 230, 118, 0.1), rgba(18, 26, 43, 0.9));
+}
+
+.rec-card.rec-rank-2 {
+    border-color: rgba(0, 242, 254, 0.5);
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(18, 26, 43, 0.9));
+}
+
+.rec-card.rec-rank-3 {
+    border-color: rgba(255, 179, 0, 0.5);
+    background: linear-gradient(135deg, rgba(255, 179, 0, 0.1), rgba(18, 26, 43, 0.9));
+}
+
+.rec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.rec-coin-name {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+}
+
+.rec-timeframe-tag {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.tag-hours {
+    background: rgba(0, 242, 254, 0.2);
+    color: var(--accent-cyan);
+    border: 1px solid var(--accent-cyan);
+}
+
+.tag-days {
+    background: rgba(0, 230, 118, 0.2);
+    color: var(--accent-green);
+    border: 1px solid var(--accent-green);
+}
+
+.tag-weeks {
+    background: rgba(255, 179, 0, 0.2);
+    color: var(--accent-gold);
+    border: 1px solid var(--accent-gold);
+}
+
+.rec-gain-box {
+    margin: 10px 0;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rec-gain-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.rec-gain-val {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent-green);
+}
+
+.rec-desc {
+    font-size: 0.85rem;
+    color: var(--text-main);
+    line-height: 1.45;
+    margin-top: 8px;
+}
+
+.keterangan-cell {
+    max-width: 280px;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: #cbd5e1;
+}
+
+.timeframe-cell {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   INSPECTOR, FEED & ML LOG REORDERED LAYOUT (ABOVE RANKINGS TABLE)
+   ========================================================================== */
+.inspector-feed-section {
+    margin-bottom: 24px;
+}
+
+.full-width-inspector {
+    width: 100%;
+    margin-bottom: 16px;
+    background: rgba(18, 26, 43, 0.85);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.feed-log-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.feed-log-grid .panel {
+    margin-bottom: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width-rankings {
+    width: 100%;
+    margin-top: 24px;
+}
+
+@media (max-width: 850px) {
+    .feed-log-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 }
