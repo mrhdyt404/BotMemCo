@@ -41,117 +41,151 @@
             </div>
         </div>
 
-        <!-- Top Metrics Stats -->
-        <section class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon">📊</div>
-                <div class="stat-content">
-                    <span class="stat-label">Monitored Meme Coins</span>
-                    <h2 class="stat-value" id="monitored-count">15 Tokens</h2>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🔥</div>
-                <div class="stat-content">
-                    <span class="stat-label">Top Pump Prediction</span>
-                    <h2 class="stat-value highlight" id="top-coin-name">Loading...</h2>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🌐</div>
-                <div class="stat-content">
-                    <span class="stat-label">Data Sources</span>
-                    <h2 class="stat-value">Platform X + Telegram</h2>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🔄</div>
-                <div class="stat-content">
-                    <span class="stat-label">Self-Learning Engine</span>
-                    <h2 class="stat-value online">SGD + Continuous ML</h2>
-                </div>
-            </div>
-        </section>
+        <!-- Navigation View Tabs -->
+        <div class="view-tabs-bar">
+            <button id="btn-tab-dashboard" class="nav-tab-btn active">
+                🔥 Live Predictor Dashboard
+            </button>
+            <button id="btn-tab-wishlist" class="nav-tab-btn">
+                ⭐ Wishlist & Tracker ML <span id="wishlist-badge" class="badge-count">0</span>
+            </button>
+        </div>
 
-        <!-- 🎯 Top 3 Recommended Coins to Buy Section -->
-        <section class="recommendations-section">
-            <div class="section-title-box">
-                <h2>💎 3 KOIN REKOMENDASI TERATAS UNTUK DIBELI</h2>
-                <p class="section-subtitle">Dihitung berdasarkan pencocokan pola histori akumulasi (seperti PEPE 2024 +100%+) & estimasi waktu kenaikan</p>
-            </div>
-            <div class="recommendations-grid" id="recommendations-container">
-                <div class="rec-card loading">
-                    <p>Memuat 3 koin rekomendasi teratas...</p>
+        <!-- 📊 Main Predictor View Page -->
+        <div id="view-dashboard-page" class="view-section">
+            <!-- Top Metrics Stats -->
+            <section class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <span class="stat-label">Monitored Meme Coins</span>
+                        <h2 class="stat-value" id="monitored-count">15 Tokens</h2>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- 🔍 Auxiliary Features Section (Positioned ABOVE Predicted Meme Coin Pump Rankings Table) -->
-        <section class="inspector-feed-section">
-            <!-- Full Width Top: Token Inspector -->
-            <div class="panel search-panel full-width-inspector">
-                <h3>🔍 Token Inspector</h3>
-                <div class="search-box">
-                    <input type="text" id="token-input" placeholder="Type ticker e.g. PEPE, DOGE, WIF...">
-                    <button id="search-btn" class="btn-secondary">Check ML</button>
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-content">
+                        <span class="stat-label">Top Pump Prediction</span>
+                        <h2 class="stat-value highlight" id="top-coin-name">Loading...</h2>
+                    </div>
                 </div>
-                <div id="search-result" class="search-result-box hidden"></div>
-            </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🌐</div>
+                    <div class="stat-content">
+                        <span class="stat-label">Data Sources</span>
+                        <h2 class="stat-value">Platform X + Telegram</h2>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔄</div>
+                    <div class="stat-content">
+                        <span class="stat-label">Self-Learning Engine</span>
+                        <h2 class="stat-value online">SGD + Continuous ML</h2>
+                    </div>
+                </div>
+            </section>
 
-            <!-- Two Columns Side-by-Side Under Token Inspector -->
-            <div class="feed-log-grid">
-                <!-- Bottom Left: Live Social Ingestion Feed -->
-                <div class="panel feed-panel">
-                    <h3>💬 Live Social Ingestion Feed</h3>
-                    <div id="post-feed" class="feed-scroll">
-                        <p class="feed-placeholder">Waiting for incoming social posts...</p>
+            <!-- 🎯 Top 3 Recommended Coins to Buy Section -->
+            <section class="recommendations-section">
+                <div class="section-title-box">
+                    <h2>💎 3 KOIN REKOMENDASI TERATAS UNTUK DIBELI</h2>
+                    <p class="section-subtitle">Dihitung berdasarkan pencocokan pola histori akumulasi (seperti PEPE 2024 +100%+) & estimasi waktu kenaikan</p>
+                </div>
+                <div class="recommendations-grid" id="recommendations-container">
+                    <div class="rec-card loading">
+                        <p>Memuat 3 koin rekomendasi teratas...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🔍 Auxiliary Features Section (Positioned ABOVE Predicted Meme Coin Pump Rankings Table) -->
+            <section class="inspector-feed-section">
+                <!-- Full Width Top: Token Inspector -->
+                <div class="panel search-panel full-width-inspector">
+                    <h3>🔍 Token Inspector</h3>
+                    <div class="search-box">
+                        <input type="text" id="token-input" placeholder="Type ticker e.g. PEPE, DOGE, WIF...">
+                        <button id="search-btn" class="btn-secondary">Check ML</button>
+                    </div>
+                    <div id="search-result" class="search-result-box hidden"></div>
+                </div>
+
+                <!-- Two Columns Side-by-Side Under Token Inspector -->
+                <div class="feed-log-grid">
+                    <!-- Bottom Left: Live Social Ingestion Feed -->
+                    <div class="panel feed-panel">
+                        <h3>💬 Live Social Ingestion Feed</h3>
+                        <div id="post-feed" class="feed-scroll">
+                            <p class="feed-placeholder">Waiting for incoming social posts...</p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Right: ML Self-Learning Log -->
+                    <div class="panel ml-log-panel">
+                        <h3>🧠 ML Self-Learning Log</h3>
+                        <ul id="ml-log-list" class="log-list">
+                            <li>System initialized. Listening for feedback loops.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🔥 Main Full-Width Table: Predicted Meme Coin Pump Rankings -->
+            <main class="panel ranking-panel full-width-rankings">
+                <div class="panel-header">
+                    <h2>🔥 Predicted Meme Coin Pump Rankings</h2>
+                    <div class="controls">
+                        <button id="refresh-btn" class="btn-primary">⚡ Refresh Predictions</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="prediction-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Coin</th>
+                                <th>Realtime Price</th>
+                                <th>Pump Prob (%)</th>
+                                <th>Recommendation</th>
+                                <th>Estimasi Waktu & Target</th>
+                                <th>Keterangan (Ringkasan Awam)</th>
+                                <th>1h Vol</th>
+                                <th>24h Vol</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prediction-tbody">
+                            <tr>
+                                <td colspan="10" class="loading-td">Analyzing posts from X and Telegram...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+
+        <!-- ⭐ Halaman Terpisah: Wishlist & Tracking Hasil Prediksi ML -->
+        <div id="view-wishlist-page" class="view-section hidden">
+            <section class="wishlist-hero-panel">
+                <div class="wishlist-header-box">
+                    <div>
+                        <h2>⭐ Wishlist Koin & Tracking Hasil Prediksi ML</h2>
+                        <p class="wishlist-subtitle">Melacak harga realtime koin yang Anda masukkan ke Wishlist. Sistem menguji apakah target (+50%/+100%) tercapai dalam rentang waktu yang diprediksi dan secara otomatis melatih kembali model ML (*Self-Learning Feedback Loop*).</p>
+                    </div>
+                    <div class="wishlist-actions">
+                        <button id="btn-refresh-wishlist" class="btn-primary">🔄 Verifikasi Realtime Prices</button>
                     </div>
                 </div>
 
-                <!-- Bottom Right: ML Self-Learning Log -->
-                <div class="panel ml-log-panel">
-                    <h3>🧠 ML Self-Learning Log</h3>
-                    <ul id="ml-log-list" class="log-list">
-                        <li>System initialized. Listening for feedback loops.</li>
-                    </ul>
+                <div class="wishlist-grid" id="wishlist-container">
+                    <div class="wishlist-empty-state">
+                        <p>Belum ada koin di Wishlist. Klik <strong>⭐ + Wishlist</strong> pada kartu rekomendasi teratas untuk mulai melacak!</p>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- 🔥 Main Full-Width Table: Predicted Meme Coin Pump Rankings -->
-        <main class="panel ranking-panel full-width-rankings">
-            <div class="panel-header">
-                <h2>🔥 Predicted Meme Coin Pump Rankings</h2>
-                <div class="controls">
-                    <button id="refresh-btn" class="btn-primary">⚡ Refresh Predictions</button>
-                </div>
-            </div>
-            <div class="table-container">
-                <table class="prediction-table">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Coin</th>
-                            <th>Pump Prob (%)</th>
-                            <th>Recommendation</th>
-                            <th>Estimasi Waktu & Target</th>
-                            <th>Keterangan (Ringkasan Awam)</th>
-                            <th>1h Vol</th>
-                            <th>24h Vol</th>
-                            <th>Vol Velocity</th>
-                            <th>Avg Sent</th>
-                        </tr>
-                    </thead>
-                    <tbody id="prediction-tbody">
-                        <tr>
-                            <td colspan="10" class="loading-td">Analyzing posts from X and Telegram...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </main>
+            </section>
+        </div>
     </div>
 
-    <script src="/static/main.js?v=3.0"></script>
+    <script src="/static/main.js?v=4.0"></script>
 </body>
 </html>

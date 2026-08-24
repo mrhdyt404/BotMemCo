@@ -90,6 +90,31 @@ class DatabaseManager:
                     notes TEXT
                 )
             """)
+
+            # Wishlist & Prediction Outcome Verification table
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS wishlist (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    token_symbol TEXT NOT NULL,
+                    entry_price REAL DEFAULT 0.0,
+                    entry_price_str TEXT DEFAULT '$0.00',
+                    pump_score REAL DEFAULT 0.0,
+                    recommendation TEXT DEFAULT 'BUY',
+                    target_gain TEXT DEFAULT '+50%',
+                    target_ratio REAL DEFAULT 1.50,
+                    timeframe TEXT DEFAULT '1-3 Hari',
+                    timeframe_days INTEGER DEFAULT 3,
+                    keterangan_awam TEXT DEFAULT '',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    target_deadline TIMESTAMP,
+                    status TEXT DEFAULT 'PENDING TRACKING ⏱️',
+                    highest_price_seen REAL DEFAULT 0.0,
+                    actual_gain_percent REAL DEFAULT 0.0,
+                    verified_at TIMESTAMP,
+                    fed_to_ml INTEGER DEFAULT 0,
+                    features_json TEXT
+                )
+            """)
             conn.commit()
 
     def insert_post(self, platform: str, post_id: str, author: str, content: str, 
@@ -207,3 +232,56 @@ class DatabaseManager:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM model_logs ORDER BY timestamp DESC LIMIT ?", (limit,))
             return [dict(row) for row in cursor.fetchall()]
+
+    def insert_wishlist(self, token_symbol: str, entry_price: float, entry_price_str: str,
+                        pump_score: float, recommendation: str, target_gain: str,
+                        target_ratio: float, timeframe: str, timeframe_days: int,
+                        keterangan_awam: str, features: dict = None) -> int:
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            now = datetime.now(timezone.utc)
+            deadline = now + timedelta(days=timeframe_days)
+            features_json = json.dumps(features) if features else None
+            cursor.execute("""
+                INSERT INTO wishlist (
+                    token_symbol, entry_price, entry_price_str, pump_score,
+                    recommendation, target_gain, target_ratio, timeframe,
+                    timeframe_days, keterangan_awam, created_at, target_deadline,
+                    highest_price_seen, status, features_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                token_symbol.upper(), entry_price, entry_price_str, pump_score,
+                recommendation, target_gain, target_ratio, timeframe,
+                timeframe_days, keterangan_awam, now.strftime("%Y-%m-%d %H:%M:%S"),
+                deadline.strftime("%Y-%m-%d %H:%M:%S"), entry_price,
+                "TRACKING ⏱️", features_json
+            ))
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_wishlists(self) -> List[Dict[str, Any]]:
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM wishlist ORDER BY created_at DESC")
+            return [dict(row) for row in cursor.fetchall()]
+
+    def update_wishlist_verification(self, wishlist_id: int, status: str,
+                                     highest_price: float, actual_gain_pct: float,
+                                     fed_to_ml: int = 0):
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+            cursor.execute("""
+                UPDATE wishlist
+                SET status = ?, highest_price_seen = ?, actual_gain_percent = ?,
+                    verified_at = ?, fed_to_ml = ?
+                WHERE id = ?
+            """, (status, highest_price, actual_gain_pct, now_str, fed_to_ml, wishlist_id))
+            conn.commit()
+
+    def delete_wishlist(self, wishlist_id: int):
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM wishlist WHERE id = ?", (wishlist_id,))
+            conn.commit()
+

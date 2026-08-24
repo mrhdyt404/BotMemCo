@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchLiveFeed();
     fetchMLStatus();
     fetchDexScreenerMarquee();
+    fetchWishlist();
 
     document.getElementById("refresh-btn").addEventListener("click", () => {
         fetchTrendingPredictions();
@@ -11,9 +12,35 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchDexScreenerMarquee();
     });
 
+    document.getElementById("btn-refresh-wishlist").addEventListener("click", () => {
+        fetchWishlist();
+        fetchMLStatus();
+    });
+
     document.getElementById("search-btn").addEventListener("click", performSearch);
     document.getElementById("token-input").addEventListener("keypress", (e) => {
         if (e.key === "Enter") performSearch();
+    });
+
+    // View Navigation Tabs
+    const tabDashboard = document.getElementById("btn-tab-dashboard");
+    const tabWishlist = document.getElementById("btn-tab-wishlist");
+    const viewDashboard = document.getElementById("view-dashboard-page");
+    const viewWishlist = document.getElementById("view-wishlist-page");
+
+    tabDashboard.addEventListener("click", () => {
+        tabDashboard.classList.add("active");
+        tabWishlist.classList.remove("active");
+        viewDashboard.classList.remove("hidden");
+        viewWishlist.classList.add("hidden");
+    });
+
+    tabWishlist.addEventListener("click", () => {
+        tabWishlist.classList.add("active");
+        tabDashboard.classList.remove("active");
+        viewWishlist.classList.remove("hidden");
+        viewDashboard.classList.add("hidden");
+        fetchWishlist();
     });
 
     // Auto refresh every 25 seconds
@@ -63,10 +90,19 @@ async function fetchTrendingPredictions() {
                     targetGainText = pred.historical_pattern.expected_gain || "+50% s/d +100%+";
                 }
                 const ketAwam = pred.keterangan_awam || pred.layman_summary || "Perbincangan sosial stabil";
+                const priceStr = pred.price_usd || "$0.000045";
+                const change24h = pred.change_24h || 0;
+                const isUp = change24h >= 0;
 
                 tr.innerHTML = `
                     <td data-label="Rank">#${index + 1}</td>
                     <td data-label="Coin" class="coin-cell">$${pred.token_symbol}</td>
+                    <td data-label="Realtime Price">
+                        <div class="timeframe-cell">
+                            <strong>${priceStr}</strong><br>
+                            <small class="price-change-badge ${isUp ? 'up' : 'down'}">${isUp ? '+' : ''}${change24h}%</small>
+                        </div>
+                    </td>
                     <td data-label="Pump Prob">
                         <div class="pump-bar-container">
                             <div class="pump-bar-bg">
@@ -87,10 +123,11 @@ async function fetchTrendingPredictions() {
                     </td>
                     <td data-label="1h Vol">${pred.post_count_1h}</td>
                     <td data-label="24h Vol">${pred.post_count_24h}</td>
-                    <td data-label="Vol Velocity" style="color: ${pred.volume_velocity >= 0 ? 'var(--accent-green)' : 'var(--accent-pink)'}">
-                        ${velSign}${Math.round(pred.volume_velocity * 100)}%
+                    <td data-label="Action">
+                        <button class="btn-wishlist-add btn-wishlist-row" onclick="addCoinToWishlist('${pred.token_symbol}', '${priceStr}', ${pred.pump_score}, '${pred.recommendation}', '${targetGainText}', '${tfText}', '${ketAwam.replace(/'/g, "\\'")}')">
+                            ⭐ Wishlist
+                        </button>
                     </td>
-                    <td data-label="Avg Sent">${pred.avg_sentiment > 0 ? '+' : ''}${pred.avg_sentiment.toFixed(2)}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -112,6 +149,9 @@ function renderRecommendations(top3) {
         let tf = coin.timeframe || (coin.historical_pattern ? coin.historical_pattern.timeframe_50 : "Beberapa Jam / Hari Ke Depan");
         let gain = coin.target_gain || coin.expected_gain || "+50%+ Potensi Kenaikan";
         let desc = coin.keterangan_awam || coin.layman_summary || "Perbincangan sosial melonjak drastis";
+        let priceStr = coin.price_usd || "$0.000045";
+        let change24h = coin.change_24h || 12.5;
+        let isUp = change24h >= 0;
 
         let timeframeTagClass = "tag-days";
         if (coin.timeframe_cat === "HOURS" || (coin.badge_label && coin.badge_label.includes("Jam"))) timeframeTagClass = "tag-hours";
@@ -123,6 +163,10 @@ function renderRecommendations(top3) {
                     <div>
                         <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); letter-spacing:0.5px;">REKOMENDASI DIBELI #${idx + 1}</span>
                         <div class="rec-coin-name">$${coin.token_symbol}</div>
+                        <div class="rec-price-box">
+                            <span class="realtime-price">${priceStr}</span>
+                            <span class="price-change-badge ${isUp ? 'up' : 'down'}">${isUp ? '+' : ''}${change24h}%</span>
+                        </div>
                     </div>
                     <span class="rec-timeframe-tag ${timeframeTagClass}">⏱️ ${tf}</span>
                 </div>
@@ -132,13 +176,155 @@ function renderRecommendations(top3) {
                 </div>
                 <p class="rec-desc">💡 ${desc}</p>
             </div>
-            <div style="margin-top:14px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.1); font-size:0.8rem; color:var(--text-muted); display:flex; justify-content:space-between; align-items:center;">
-                <span>Skor ML: <strong style="color:var(--accent-cyan); font-family:var(--font-mono);">${coin.pump_score}%</strong></span>
-                <span class="badge ${coin.recommendation.includes('STRONG BUY') ? 'badge-strong-buy' : coin.recommendation.includes('BULLISH') ? 'badge-bullish' : 'badge-neutral'}">${coin.recommendation}</span>
+            <div>
+                <div style="margin-top:14px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.1); font-size:0.8rem; color:var(--text-muted); display:flex; justify-content:space-between; align-items:center;">
+                    <span>Skor ML: <strong style="color:var(--accent-cyan); font-family:var(--font-mono);">${coin.pump_score}%</strong></span>
+                    <span class="badge ${coin.recommendation.includes('STRONG BUY') ? 'badge-strong-buy' : coin.recommendation.includes('BULLISH') ? 'badge-bullish' : 'badge-neutral'}">${coin.recommendation}</span>
+                </div>
+                <button class="btn-wishlist-add" onclick="addCoinToWishlist('${coin.token_symbol}', '${priceStr}', ${coin.pump_score}, '${coin.recommendation}', '${gain}', '${tf}', '${desc.replace(/'/g, "\\'")}')">
+                    ⭐ + Tambah ke Wishlist & Tracker
+                </button>
             </div>
         `;
         container.appendChild(card);
     });
+}
+
+// Wishlist Functionality
+async function addCoinToWishlist(tokenSymbol, priceStr, pumpScore, recommendation, targetGain, timeframe, keteranganAwam) {
+    try {
+        const res = await fetch("/api/wishlist/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                token_symbol: tokenSymbol,
+                entry_price_str: priceStr,
+                pump_score: pumpScore,
+                recommendation: recommendation,
+                target_gain: targetGain,
+                timeframe: timeframe,
+                keterangan_awam: keteranganAwam
+            })
+        });
+        const data = await res.json();
+        if (data.status === "ok") {
+            alert(`⭐ Koin $${tokenSymbol} (${priceStr}) berhasil ditambahkan ke Wishlist & Tracker!\n\nSistem akan memantau fluktuasi harga dalam ${timeframe} untuk menguji keakuratan prediksi dan melatih model ML.`);
+            fetchWishlist();
+        }
+    } catch (e) {
+        console.error("Error adding to wishlist:", e);
+        alert("Gagal menambahkan ke Wishlist.");
+    }
+}
+
+async function fetchWishlist() {
+    const container = document.getElementById("wishlist-container");
+    const badge = document.getElementById("wishlist-badge");
+    try {
+        const res = await fetch("/api/wishlist");
+        const data = await res.json();
+
+        if (data.status === "ok" && data.wishlist) {
+            badge.innerText = data.wishlist.length;
+            
+            if (data.wishlist.length === 0) {
+                container.innerHTML = `
+                    <div class="wishlist-empty-state">
+                        <p>Belum ada koin di Wishlist. Klik tombol <strong>⭐ + Wishlist</strong> pada kartu rekomendasi teratas untuk mulai melacak!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = "";
+            data.wishlist.forEach(item => {
+                const card = document.createElement("div");
+                const isSuccess = item.status.includes("BENAR") || item.status.includes("🎯");
+                card.className = `wishlist-card ${isSuccess ? 'status-success' : ''}`;
+
+                const gainSign = item.current_gain_pct >= 0 ? "+" : "";
+                const isUp = item.current_gain_pct >= 0;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="wishlist-card-header">
+                            <div>
+                                <span style="font-size:0.7rem; font-weight:800; color:var(--text-muted);">TRACKING WISHLIST #${item.id}</span>
+                                <div class="wishlist-token-title">$${item.token_symbol}</div>
+                            </div>
+                            <span class="wishlist-status-badge ${isSuccess ? 'status-badge-success' : 'status-badge-tracking'}">
+                                ${item.status}
+                            </span>
+                        </div>
+
+                        <div class="wishlist-price-comparison">
+                            <div class="price-box-item">
+                                <span class="price-box-label">Harga Saat Wishlist</span>
+                                <span class="price-box-value">${item.entry_price_str}</span>
+                            </div>
+                            <div style="font-size:1.2rem; color:var(--text-muted);">➔</div>
+                            <div class="price-box-item" style="text-align:right;">
+                                <span class="price-box-label">Harga Market Live</span>
+                                <span class="price-box-value" style="color: ${isUp ? 'var(--accent-green)' : 'var(--accent-pink)'}">
+                                    ${item.current_price_str} (${gainSign}${item.current_gain_pct}%)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:8px; margin-bottom:10px; font-size:0.8rem; line-height:1.4;">
+                            • <strong>Target Kenaikan:</strong> <span style="color:var(--accent-green); font-weight:700;">${item.target_gain}</span><br>
+                            • <strong>Estimasi Waktu:</strong> <span style="color:var(--accent-cyan); font-weight:700;">⏱️ ${item.timeframe}</span><br>
+                            • <strong>Skor ML:</strong> ${item.pump_score}% (${item.recommendation})<br>
+                            • <strong>Keterangan:</strong> <em>${item.keterangan_awam}</em>
+                        </div>
+
+                        ${item.fed_to_ml === 1 ? `
+                            <div style="background:rgba(0,230,118,0.15); border:1px solid var(--accent-green); padding:6px 10px; border-radius:6px; font-size:0.75rem; color:var(--accent-green); font-weight:700; margin-bottom:10px;">
+                                🧠 Hasil Prediksi Berhasil Dipelajari oleh Continuous ML Engine!
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div>
+                        ${!isSuccess ? `
+                            <button class="btn-simulate-pump" onclick="simulateWishlistPump(${item.id})">
+                                🧪 Uji Demo Simulasi Kenaikan (+50%+) & Latih ML
+                            </button>
+                        ` : ''}
+                        <button class="btn-delete-wishlist" onclick="deleteWishlist(${item.id})">
+                            🗑️ Hapus dari Wishlist
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    } catch (e) {
+        console.error("Error fetching wishlist:", e);
+    }
+}
+
+async function simulateWishlistPump(wishlistId) {
+    try {
+        const res = await fetch(`/api/wishlist/simulate_pump/${wishlistId}`, { method: "POST" });
+        const data = await res.json();
+        if (data.status === "ok") {
+            alert(data.message);
+            fetchWishlist();
+            fetchMLStatus();
+        }
+    } catch (e) {
+        console.error("Error simulating pump:", e);
+    }
+}
+
+async function deleteWishlist(wishlistId) {
+    try {
+        await fetch(`/api/wishlist/${wishlistId}`, { method: "DELETE" });
+        fetchWishlist();
+    } catch (e) {
+        console.error("Error deleting wishlist:", e);
+    }
 }
 
 async function fetchLiveFeed() {
@@ -207,6 +393,7 @@ async function performSearch() {
 
         resultBox.innerHTML = `
             <strong>$${data.token_symbol} ML Prediction:</strong><br>
+            • Realtime Price: <strong style="color:var(--text-main)">${data.price_usd}</strong> (${data.change_24h}%)<br>
             • Pump Score: <strong style="color:var(--accent-cyan)">${data.pump_score}%</strong> (${data.recommendation})<br>
             • Target Gain: <strong style="color:var(--accent-green)">${data.target_gain}</strong><br>
             • Waktu Kenaikan: <strong>${data.timeframe}</strong><br>
@@ -225,7 +412,6 @@ async function fetchDexScreenerMarquee() {
         const data = await res.json();
 
         if (data.status === "ok" && data.tickers && data.tickers.length > 0) {
-            // Create items string twice for seamless loop
             const renderItems = (items) => items.map(t => {
                 const isUp = t.change_24h >= 0;
                 const changeSign = isUp ? "+" : "";
@@ -240,10 +426,10 @@ async function fetchDexScreenerMarquee() {
                 `;
             }).join("");
 
-            // Duplicate array to ensure infinite CSS marquee loop
             container.innerHTML = renderItems(data.tickers) + renderItems(data.tickers);
         }
     } catch (e) {
         console.error("Error fetching DEX Screener marquee:", e);
     }
 }
+
