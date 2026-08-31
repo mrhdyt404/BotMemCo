@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import config
 from ingestion.database import DatabaseManager
-from ingestion.dexscreener_collector import DexScreenerCollector
+from ingestion.dexscreener_collector import DexScreenerCollector, get_token_network_info
 from engine.feature_pipeline import FeaturePipeline
 from ml.model_manager import MemeCoinMLManager
 from engine.historical_analyzer import HistoricalPatternAnalyzer
@@ -72,6 +72,9 @@ async def get_trending_predictions():
         price_str = price_info.get("price", "$0.000045")
         change_24h = price_info.get("change_24h", 12.5)
 
+        net_info = price_info.get("network_badge") or get_token_network_info(token)["badge"]
+        net_class = price_info.get("network_class") or get_token_network_info(token)["class"]
+
         predictions.append({
             "id": pred_id,
             "token_symbol": token,
@@ -80,6 +83,8 @@ async def get_trending_predictions():
             "recommendation": recommendation,
             "price_usd": price_str,
             "change_24h": change_24h,
+            "network_badge": net_info,
+            "network_class": net_class,
             "post_count_1h": feat["post_count_1h"],
             "post_count_24h": feat["post_count_24h"],
             "volume_velocity": feat["volume_velocity"],
@@ -129,6 +134,7 @@ async def predict_token(token_symbol: str):
     prices_map = get_live_prices_dict()
     price_info = prices_map.get(token, {})
 
+    net_info = get_token_network_info(token)
     return {
         "token_symbol": token,
         "pump_score": pump_score_pct,
@@ -136,6 +142,8 @@ async def predict_token(token_symbol: str):
         "recommendation": recommendation,
         "price_usd": price_info.get("price", "$0.000045"),
         "change_24h": price_info.get("change_24h", 12.5),
+        "network_badge": net_info["badge"],
+        "network_class": net_info["class"],
         "target_gain": hist_eval["target_gain"],
         "timeframe": hist_eval["timeframe"],
         "keterangan_awam": hist_eval["keterangan_awam"],
@@ -240,6 +248,7 @@ async def get_wishlist():
         else:
             db.update_wishlist_verification(item["id"], status, highest_price, current_gain_pct, fed_to_ml=fed_to_ml)
 
+        net_info = get_token_network_info(item["token_symbol"])
         item_dict = {
             "id": int(item["id"]),
             "token_symbol": str(item["token_symbol"]),
@@ -258,7 +267,9 @@ async def get_wishlist():
             "current_gain_pct": float(current_gain_pct),
             "highest_gain_pct": float(highest_gain_pct),
             "status": str(status),
-            "fed_to_ml": int(fed_to_ml)
+            "fed_to_ml": int(fed_to_ml),
+            "network_badge": net_info["badge"],
+            "network_class": net_info["class"]
         }
         processed_items.append(item_dict)
 

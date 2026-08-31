@@ -23,6 +23,32 @@ COINGECKO_MAP = {
     "SLERF": "slerf"
 }
 
+TOKEN_NETWORK_MAP = {
+    "DOGE": {"network": "Dogecoin", "badge": "🐕 Dogecoin Chain", "class": "net-doge"},
+    "PEPE": {"network": "Ethereum", "badge": "🔹 Ethereum (ERC-20)", "class": "net-eth"},
+    "SHIB": {"network": "Ethereum", "badge": "🔹 Ethereum (ERC-20)", "class": "net-eth"},
+    "FLOKI": {"network": "BNB / Ethereum", "badge": "🟡 BNB / Ethereum", "class": "net-bsc"},
+    "BONK": {"network": "Solana", "badge": "🟣 Solana (SPL)", "class": "net-sol"},
+    "WIF": {"network": "Solana", "badge": "🟣 Solana (SPL)", "class": "net-sol"},
+    "BOME": {"network": "Solana", "badge": "🟣 Solana (SPL)", "class": "net-sol"},
+    "MEW": {"network": "Solana", "badge": "🟣 Solana (SPL)", "class": "net-sol"},
+    "BRETT": {"network": "Base", "badge": "🔵 Base Chain", "class": "net-base"},
+    "POPCAT": {"network": "Solana", "badge": "🟣 Solana (SPL)", "class": "net-sol"},
+    "MOG": {"network": "Ethereum", "badge": "🔹 Ethereum (ERC-20)", "class": "net-eth"},
+    "NEIRO": {"network": "Ethereum", "badge": "🔹 Ethereum (ERC-20)", "class": "net-eth"},
+    "TURBO": {"network": "Ethereum", "badge": "🔹 Ethereum (ERC-20)", "class": "net-eth"},
+    "MYRO": {"network": "Solana", "badge": "🟣 Solana (SPL)", "class": "net-sol"},
+    "SLERF": {"network": "Solana", "badge": "🟣 Solana (SPL)", "class": "net-sol"}
+}
+
+def get_token_network_info(symbol: str) -> Dict[str, str]:
+    sym_upper = symbol.upper()
+    return TOKEN_NETWORK_MAP.get(sym_upper, {
+        "network": "Multi-Chain",
+        "badge": "🌐 Multi-Chain",
+        "class": "net-eth"
+    })
+
 def format_crypto_price(val: float) -> str:
     if val <= 0:
         return "$0.00"
@@ -63,12 +89,16 @@ class DexScreenerCollector:
                         info = data[cg_id]
                         price_val = float(info.get("usd", 0.0))
                         change_val = float(info.get("usd_24h_change", 0.0) or 0.0)
+                        net_info = get_token_network_info(sym_upper)
                         results[sym_upper] = {
                             "symbol": sym_upper,
                             "price": format_crypto_price(price_val),
                             "change_24h": round(change_val, 2),
                             "dex": "SPOT MARKET",
-                            "url": f"https://www.coingecko.com/en/coins/{cg_id}"
+                            "url": f"https://www.coingecko.com/en/coins/{cg_id}",
+                            "network": net_info["network"],
+                            "network_badge": net_info["badge"],
+                            "network_class": net_info["class"]
                         }
                 return results
         except Exception as e:
@@ -77,11 +107,11 @@ class DexScreenerCollector:
 
     def fetch_dex_screener_single(self, symbol: str) -> Dict[str, Any]:
         sym_upper = symbol.upper()
+        net_info = get_token_network_info(sym_upper)
         try:
             res = requests.get(f"{self.dex_base_url}?q={sym_upper}", timeout=5)
             if res.status_code == 200:
                 pairs = res.json().get("pairs", [])
-                # Strict filter for pairs where baseToken symbol matches target exactly
                 exact_pairs = [p for p in pairs if p.get("baseToken", {}).get("symbol", "").upper() == sym_upper]
                 target_pairs = exact_pairs if exact_pairs else pairs
                 if target_pairs:
@@ -93,7 +123,10 @@ class DexScreenerCollector:
                         "price": format_crypto_price(price_usd),
                         "change_24h": round(h24_change, 2),
                         "dex": top_pair.get("dexId", "DEX").upper(),
-                        "url": top_pair.get("url", "https://dexscreener.com")
+                        "url": top_pair.get("url", "https://dexscreener.com"),
+                        "network": net_info["network"],
+                        "network_badge": net_info["badge"],
+                        "network_class": net_info["class"]
                     }
         except Exception as e:
             logger.warning(f"DexScreener fetch failed for {symbol}: {e}")
@@ -109,12 +142,10 @@ class DexScreenerCollector:
             if sym_upper in tickers_map:
                 final_tickers.append(tickers_map[sym_upper])
             else:
-                # Fallback to DEX Screener exact pair search
                 dex_data = self.fetch_dex_screener_single(sym_upper)
                 if dex_data:
                     final_tickers.append(dex_data)
 
-        # Final fallback simulation if APIs are totally unreachable
         if not final_tickers:
             final_tickers = self._fallback_tickers(target_symbols)
 
@@ -124,12 +155,17 @@ class DexScreenerCollector:
         import random
         fallback = []
         for symbol in symbols:
+            sym_upper = symbol.upper()
+            net_info = get_token_network_info(sym_upper)
             change = round(random.uniform(-5.0, 15.0), 2)
             fallback.append({
-                "symbol": symbol.upper(),
-                "price": "$0.00002403" if symbol.upper() == "FLOKI" else f"${random.uniform(0.00001, 0.5):.6f}",
+                "symbol": sym_upper,
+                "price": "$0.00002403" if sym_upper == "FLOKI" else f"${random.uniform(0.00001, 0.5):.6f}",
                 "change_24h": change,
                 "dex": "MARKET",
-                "url": "https://dexscreener.com"
+                "url": "https://dexscreener.com",
+                "network": net_info["network"],
+                "network_badge": net_info["badge"],
+                "network_class": net_info["class"]
             })
         return fallback

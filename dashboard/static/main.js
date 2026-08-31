@@ -97,6 +97,7 @@ async function fetchTrendingPredictions() {
                 tr.innerHTML = `
                     <td data-label="Rank">#${index + 1}</td>
                     <td data-label="Coin" class="coin-cell">$${pred.token_symbol}</td>
+                    <td data-label="Jaringan"><span class="net-badge ${pred.network_class || 'net-eth'}">${pred.network_badge || '🔹 Ethereum'}</span></td>
                     <td data-label="Realtime Price">
                         <div class="timeframe-cell">
                             <strong>${priceStr}</strong><br>
@@ -162,7 +163,7 @@ function renderRecommendations(top3) {
                 <div class="rec-header">
                     <div>
                         <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); letter-spacing:0.5px;">REKOMENDASI DIBELI #${idx + 1}</span>
-                        <div class="rec-coin-name">$${coin.token_symbol}</div>
+                        <div class="rec-coin-name">$${coin.token_symbol} <span class="net-badge ${coin.network_class || 'net-eth'}" style="margin-left:6px; font-size:0.7rem; font-weight:700;">${coin.network_badge || '🔹 Ethereum'}</span></div>
                         <div class="rec-price-box">
                             <span class="realtime-price">${priceStr}</span>
                             <span class="price-change-badge ${isUp ? 'up' : 'down'}">${isUp ? '+' : ''}${change24h}%</span>
@@ -250,7 +251,7 @@ async function fetchWishlist() {
                         <div class="wishlist-card-header">
                             <div>
                                 <span style="font-size:0.7rem; font-weight:800; color:var(--text-muted);">TRACKING WISHLIST #${item.id}</span>
-                                <div class="wishlist-token-title">$${item.token_symbol}</div>
+                                <div class="wishlist-token-title">$${item.token_symbol} <span class="net-badge ${item.network_class || 'net-eth'}" style="font-size:0.7rem; margin-left:6px;">${item.network_badge || '🔹 Ethereum'}</span></div>
                             </div>
                             <span class="wishlist-status-badge ${isSuccess ? 'status-badge-success' : 'status-badge-tracking'}">
                                 ${item.status}
@@ -392,7 +393,7 @@ async function performSearch() {
         const data = await res.json();
 
         resultBox.innerHTML = `
-            <strong>$${data.token_symbol} ML Prediction:</strong><br>
+            <strong>$${data.token_symbol} ML Prediction:</strong> <span class="net-badge ${data.network_class || 'net-eth'}" style="font-size:0.7rem; margin-left:6px;">${data.network_badge || '🔹 Ethereum'}</span><br>
             • Realtime Price: <strong style="color:var(--text-main)">${data.price_usd}</strong> (${data.change_24h}%)<br>
             • Pump Score: <strong style="color:var(--accent-cyan)">${data.pump_score}%</strong> (${data.recommendation})<br>
             • Target Gain: <strong style="color:var(--accent-green)">${data.target_gain}</strong><br>
@@ -419,6 +420,7 @@ async function fetchDexScreenerMarquee() {
                 return `
                     <span class="marquee-item">
                         <span class="marquee-symbol">$${t.symbol}</span>
+                        <span class="net-badge ${t.network_class || 'net-eth'}" style="font-size:0.65rem; padding:2px 6px; margin:0 4px;">${t.network_badge || '🔹 ETH'}</span>
                         <span class="marquee-price">${t.price}</span>
                         <span class="marquee-change ${changeClass}">${changeSign}${t.change_24h}%</span>
                         <span style="opacity:0.3">|</span>

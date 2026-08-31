@@ -1056,6 +1056,52 @@ body {
     width: auto;
 }
 
+/* ==========================================================================
+   NETWORK / CHAIN BADGES
+   ========================================================================== */
+.net-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.net-sol {
+    background: linear-gradient(135deg, rgba(153, 69, 255, 0.25), rgba(20, 241, 149, 0.15));
+    border: 1px solid rgba(153, 69, 255, 0.5);
+    color: #d8b4fe;
+}
+
+.net-eth {
+    background: linear-gradient(135deg, rgba(98, 126, 234, 0.25), rgba(79, 172, 254, 0.15));
+    border: 1px solid rgba(98, 126, 234, 0.5);
+    color: #93c5fd;
+}
+
+.net-bsc {
+    background: linear-gradient(135deg, rgba(243, 186, 47, 0.25), rgba(255, 215, 0, 0.15));
+    border: 1px solid rgba(243, 186, 47, 0.5);
+    color: #fde047;
+}
+
+.net-base {
+    background: linear-gradient(135deg, rgba(0, 82, 255, 0.25), rgba(0, 242, 254, 0.15));
+    border: 1px solid rgba(0, 82, 255, 0.5);
+    color: #60a5fa;
+}
+
+.net-doge {
+    background: linear-gradient(135deg, rgba(194, 166, 96, 0.25), rgba(255, 179, 0, 0.15));
+    border: 1px solid rgba(194, 166, 96, 0.5);
+    color: #fef08a;
+}
+
 /* Realtime Price Tags */
 .rec-price-box {
     display: flex;
