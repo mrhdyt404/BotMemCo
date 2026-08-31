@@ -28,11 +28,14 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
+from engine.event_analyzer import EventCatalystAnalyzer
+
 db = DatabaseManager()
 dex_collector = DexScreenerCollector()
 feature_pipeline = FeaturePipeline(db)
 ml_manager = MemeCoinMLManager()
 historical_analyzer = HistoricalPatternAnalyzer()
+event_analyzer = EventCatalystAnalyzer()
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
@@ -40,11 +43,23 @@ async def read_root(request: Request):
 
 def get_live_prices_dict() -> Dict[str, Dict[str, Any]]:
     try:
-        tickers = dex_collector.fetch_live_tickers(config.TARGET_MEME_COINS)
+        tickers = dex_collector.fetch_live_tickers(config.TARGET_MEME_COINS + ["BTC"])
         return {t["symbol"]: t for t in tickers}
     except Exception as e:
         logger.warning(f"Error fetching live prices: {e}")
         return {}
+
+@app.get("/api/btc")
+async def get_btc_status():
+    prices_map = get_live_prices_dict()
+    btc_price_info = prices_map.get("BTC", {})
+    pinned_status = event_analyzer.get_btc_pinned_status(btc_price_info)
+    return {"status": "ok", "btc": pinned_status}
+
+@app.get("/api/events")
+async def get_market_events():
+    events = event_analyzer.get_active_news_events()
+    return {"status": "ok", "events": events}
 
 @app.get("/api/trending")
 async def get_trending_predictions():

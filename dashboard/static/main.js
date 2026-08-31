@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+    fetchBTCStatus();
+    fetchMarketEvents();
     fetchTrendingPredictions();
     fetchLiveFeed();
     fetchMLStatus();
@@ -6,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchWishlist();
 
     document.getElementById("refresh-btn").addEventListener("click", () => {
+        fetchBTCStatus();
+        fetchMarketEvents();
         fetchTrendingPredictions();
         fetchLiveFeed();
         fetchMLStatus();
@@ -45,6 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Auto refresh every 25 seconds
     setInterval(() => {
+        fetchBTCStatus();
+        fetchMarketEvents();
         fetchTrendingPredictions();
         fetchLiveFeed();
         fetchMLStatus();
@@ -432,6 +438,75 @@ async function fetchDexScreenerMarquee() {
         }
     } catch (e) {
         console.error("Error fetching DEX Screener marquee:", e);
+    }
+}
+
+async function fetchBTCStatus() {
+    try {
+        const res = await fetch("/api/btc");
+        const data = await res.json();
+        if (data.status === "ok" && data.btc) {
+            const btc = data.btc;
+            document.getElementById("btc-price-usd").innerText = btc.price_usd;
+            
+            const changeBadge = document.getElementById("btc-change-24h");
+            const isUp = btc.change_24h >= 0;
+            changeBadge.innerText = `${isUp ? '+' : ''}${btc.change_24h}%`;
+            changeBadge.className = `price-change-badge ${isUp ? 'up' : 'down'}`;
+            
+            document.getElementById("btc-sentiment").innerText = btc.market_sentiment;
+            document.getElementById("btc-macro-summary").innerText = btc.macro_health_summary;
+        }
+    } catch (e) {
+        console.error("Error fetching BTC status:", e);
+    }
+}
+
+async function fetchMarketEvents() {
+    const container = document.getElementById("market-events-container");
+    if (!container) return;
+
+    try {
+        const res = await fetch("/api/events");
+        const data = await res.json();
+
+        if (data.status === "ok" && data.events && data.events.length > 0) {
+            container.innerHTML = "";
+            data.events.forEach(evt => {
+                const card = document.createElement("div");
+                card.className = `event-card ${evt.direction_class}`;
+
+                const targetCoinsHtml = evt.target_coins.map(c => `<span class="net-badge net-eth" style="font-size:0.65rem; padding:1px 6px;">$${c}</span>`).join(" ");
+
+                card.innerHTML = `
+                    <div>
+                        <div class="evt-header">
+                            <span class="net-badge net-doge" style="font-size:0.65rem;">📌 ${evt.category}</span>
+                            <span class="evt-time">⏱️ ${evt.timestamp}</span>
+                        </div>
+                        <div class="evt-title">${evt.title}</div>
+                        <div class="evt-summary">${evt.summary}</div>
+                    </div>
+                    <div>
+                        <div style="margin-bottom:8px; font-size:0.78rem;">
+                            <strong>Koin Terdampak:</strong> ${targetCoinsHtml} | Dampak: <strong style="color:var(--accent-cyan);">${evt.impact_rating}</strong>
+                        </div>
+                        <div class="hist-match-box">
+                            <div class="hist-match-title">
+                                <span>📜 Pencocokan Histori Berita</span>
+                                <span style="color:var(--accent-green); font-weight:800;">🎯 ${evt.historical_match.similarity_score}% Kemiripan</span>
+                            </div>
+                            • <strong>Peristiwa Histori Lalu:</strong> <em>${evt.historical_match.matched_event}</em><br>
+                            • <strong>Hasil Kenaikan/Koreksi Histori:</strong> <span style="color:var(--accent-green); font-weight:700;">${evt.historical_match.historical_result}</span><br>
+                            • <strong>Sinyal Pembelajaran ML:</strong> <code style="color:var(--accent-cyan);">${evt.historical_match.ml_signal}</code>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    } catch (e) {
+        console.error("Error fetching market events:", e);
     }
 }
 

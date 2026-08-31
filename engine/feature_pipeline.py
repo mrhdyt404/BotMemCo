@@ -4,11 +4,14 @@ from typing import Dict, Any, List
 from ingestion.database import DatabaseManager
 import config
 
+from engine.event_analyzer import EventCatalystAnalyzer
+
 logger = logging.getLogger(__name__)
 
 class FeaturePipeline:
     def __init__(self, db_manager: DatabaseManager = None):
         self.db = db_manager or DatabaseManager()
+        self.event_analyzer = EventCatalystAnalyzer()
 
     def compute_token_features(self, token_symbol: str) -> Dict[str, Any]:
         """
@@ -81,6 +84,9 @@ class FeaturePipeline:
         # Social Reach Score: weighted combination of volume, author diversity, engagement
         social_reach_score = (post_count_1h * 1.5) + (unique_authors_1h * 2.0) + (total_engagement_1h * 0.1)
 
+        # Compute Crypto News & Historical Event Impact Features
+        evt_info = self.event_analyzer.compute_news_impact_for_token(token)
+
         features = {
             "token_symbol": token,
             "post_count_1h": post_count_1h,
@@ -92,6 +98,8 @@ class FeaturePipeline:
             "total_engagement_1h": total_engagement_1h,
             "social_reach_score": round(social_reach_score, 2),
             "x_ratio": round(x_ratio, 4),
+            "news_impact_score": evt_info["news_impact_score"],
+            "hist_event_similarity": evt_info["hist_event_similarity"],
             "timestamp": now.strftime("%Y-%m-%d %H:%M:%S")
         }
 

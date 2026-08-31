@@ -12,6 +12,30 @@
 <body>
     <div class="background-glob"></div>
     <div class="app-container">
+        <!-- 📌 PINNED TOP: BTC Master Market Reference Banner -->
+        <div class="btc-pinned-banner" id="btc-pinned-bar">
+            <div class="btc-pinned-left">
+                <div class="btc-badge-pin">📌 PINNED MASTER</div>
+                <div class="btc-icon-box">₿</div>
+                <div>
+                    <div class="btc-title-box">
+                        <span class="btc-symbol-name">BITCOIN ($BTC)</span>
+                        <span class="net-badge net-doge" style="font-size:0.7rem;">₿ Bitcoin Mainnet</span>
+                    </div>
+                    <div class="btc-macro-text" id="btc-macro-summary">Loading Bitcoin market state...</div>
+                </div>
+            </div>
+            <div class="btc-pinned-right">
+                <div class="btc-price-group">
+                    <span class="btc-live-price" id="btc-price-usd">$64,250.00</span>
+                    <span class="price-change-badge up" id="btc-change-24h">+2.45%</span>
+                </div>
+                <div class="btc-impact-tag">
+                    <span>Sentimen Makro: <strong style="color:var(--accent-cyan);" id="btc-sentiment">BULLISH 🚀</strong></span>
+                </div>
+            </div>
+        </div>
+
         <!-- Header -->
         <header class="navbar">
             <div class="brand">
@@ -126,6 +150,17 @@
                         <ul id="ml-log-list" class="log-list">
                             <li>System initialized. Listening for feedback loops.</li>
                         </ul>
+                    </div>
+                </div>
+
+                <!-- Full Width Bottom: Market Events & Historical News Matcher -->
+                <div class="panel news-panel full-width-news" style="margin-top:20px;">
+                    <div class="panel-header">
+                        <h3>📰 Crypto Market Events & News Catalysts (Analisis Berita & Pencocokan Histori AI)</h3>
+                        <span class="badge badge-strong-buy" style="font-size:0.75rem;">Umpan Data Model ML</span>
+                    </div>
+                    <div class="events-grid" id="market-events-container">
+                        <p class="feed-placeholder">Memuat analisis berita kejadian & pencocokan histori...</p>
                     </div>
                 </div>
             </section>

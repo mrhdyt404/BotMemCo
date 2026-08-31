@@ -19,7 +19,9 @@ FEATURE_KEYS = [
     "unique_authors_1h",
     "total_engagement_1h",
     "social_reach_score",
-    "x_ratio"
+    "x_ratio",
+    "news_impact_score",
+    "hist_event_similarity"
 ]
 
 class MemeCoinMLManager:
@@ -52,7 +54,13 @@ class MemeCoinMLManager:
             try:
                 with open(self.model_file, "rb") as f:
                     state = pickle.load(f)
-                    self.scaler = state["scaler"]
+                    scaler = state["scaler"]
+                    if hasattr(scaler, "n_features_in_") and scaler.n_features_in_ != len(FEATURE_KEYS):
+                        logger.info("Feature shape mismatch in saved model. Re-bootstrapping model.")
+                        self._bootstrap_initial_model()
+                        return
+
+                    self.scaler = scaler
                     self.online_model = state["online_model"]
                     self.batch_model = state["batch_model"]
                     self.is_scaler_fitted = state.get("is_scaler_fitted", False)
@@ -85,12 +93,14 @@ class MemeCoinMLManager:
             engagement = int(p1h * np.random.uniform(2, 20))
             reach = (p1h * 1.5) + (authors * 2.0) + (engagement * 0.1)
             x_ratio = np.random.uniform(0.2, 0.8)
+            news_impact = np.random.uniform(-0.5, 0.9)
+            hist_sim = np.random.uniform(0.0, 95.0)
 
-            vec = [p1h, p24h, velocity, sentiment, bullish_ratio, authors, engagement, reach, x_ratio]
+            vec = [p1h, p24h, velocity, sentiment, bullish_ratio, authors, engagement, reach, x_ratio, news_impact, hist_sim]
             X_dummy.append(vec)
 
-            # Heuristic pump condition: High velocity + high bullish sentiment + high post count
-            is_pump = 1 if (velocity > 0.8 and sentiment > 0.3 and p1h > 15 and bullish_ratio > 0.6) else 0
+            # Heuristic pump condition: High velocity + high bullish sentiment + high post count + positive news impact
+            is_pump = 1 if (velocity > 0.8 and sentiment > 0.3 and p1h > 15 and bullish_ratio > 0.6 and news_impact > 0.1) else 0
             y_dummy.append(is_pump)
 
         X_arr = np.array(X_dummy)
