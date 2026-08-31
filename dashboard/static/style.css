@@ -342,7 +342,7 @@ body {
 }
 
 .prediction-table {
-    width: 100%;
+    width: max-content;
     min-width: 1050px;
     border-collapse: collapse;
     text-align: left;
@@ -1472,4 +1472,4 @@ body {
 .btn-delete-wishlist:hover {
     background: var(--accent-pink);
     color: #fff;
-}
+}
