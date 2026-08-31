@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MemeCoin ML Trend & Prediction Bot</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css?v=2.1">
 </head>
+
 <body>
     <div class="background-glob"></div>
     <div class="app-container">
         <!-- 📌 PINNED TOP: BTC Master Market Reference Banner -->
         <div class="btc-pinned-banner" id="btc-pinned-bar">
             <div class="btc-pinned-left">
-                <div class="btc-badge-pin">📌 PINNED MASTER</div>
+                <!-- <div class="btc-badge-pin">📌 PINNED MASTER</div> -->
                 <div class="btc-icon-box">₿</div>
                 <div>
                     <div class="btc-title-box">
@@ -31,7 +35,8 @@
                     <span class="price-change-badge up" id="btc-change-24h">+2.45%</span>
                 </div>
                 <div class="btc-impact-tag">
-                    <span>Sentimen Makro: <strong style="color:var(--accent-cyan);" id="btc-sentiment">BULLISH 🚀</strong></span>
+                    <span>Sentimen Makro: <strong style="color:var(--accent-cyan);" id="btc-sentiment">BULLISH
+                            🚀</strong></span>
                 </div>
             </div>
         </div>
@@ -113,7 +118,8 @@
             <section class="recommendations-section">
                 <div class="section-title-box">
                     <h2>💎 3 KOIN REKOMENDASI TERATAS UNTUK DIBELI</h2>
-                    <p class="section-subtitle">Dihitung berdasarkan pencocokan pola histori akumulasi (seperti PEPE 2024 +100%+) & estimasi waktu kenaikan</p>
+                    <p class="section-subtitle">Dihitung berdasarkan pencocokan pola histori akumulasi (seperti PEPE
+                        2024 +100%+) & estimasi waktu kenaikan</p>
                 </div>
                 <div class="recommendations-grid" id="recommendations-container">
                     <div class="rec-card loading">
@@ -206,7 +212,9 @@
                 <div class="wishlist-header-box">
                     <div>
                         <h2>⭐ Wishlist Koin & Tracking Hasil Prediksi ML</h2>
-                        <p class="wishlist-subtitle">Melacak harga realtime koin yang Anda masukkan ke Wishlist. Sistem menguji apakah target (+50%/+100%) tercapai dalam rentang waktu yang diprediksi dan secara otomatis melatih kembali model ML (*Self-Learning Feedback Loop*).</p>
+                        <p class="wishlist-subtitle">Melacak harga realtime koin yang Anda masukkan ke Wishlist. Sistem
+                            menguji apakah target (+50%/+100%) tercapai dalam rentang waktu yang diprediksi dan secara
+                            otomatis melatih kembali model ML (*Self-Learning Feedback Loop*).</p>
                     </div>
                     <div class="wishlist-actions">
                         <button id="btn-refresh-wishlist" class="btn-primary">🔄 Verifikasi Realtime Prices</button>
@@ -215,7 +223,8 @@
 
                 <div class="wishlist-grid" id="wishlist-container">
                     <div class="wishlist-empty-state">
-                        <p>Belum ada koin di Wishlist. Klik <strong>⭐ + Wishlist</strong> pada kartu rekomendasi teratas untuk mulai melacak!</p>
+                        <p>Belum ada koin di Wishlist. Klik <strong>⭐ + Wishlist</strong> pada kartu rekomendasi teratas
+                            untuk mulai melacak!</p>
                     </div>
                 </div>
             </section>
@@ -224,4 +233,5 @@
 
     <script src="/static/main.js?v=4.0"></script>
 </body>
+
 </html>
