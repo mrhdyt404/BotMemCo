@@ -478,14 +478,33 @@ async function fetchMarketEvents() {
 
                 const targetCoinsHtml = evt.target_coins.map(c => `<span class="net-badge net-eth" style="font-size:0.65rem; padding:1px 6px;">$${c}</span>`).join(" ");
 
+                const newsLinkHtml = evt.source_url ? `
+                    <a href="${evt.source_url}" target="_blank" rel="noopener noreferrer" class="news-source-badge" title="Buka berita di ${evt.source_name || 'Situs Berita'} (${evt.source_domain || ''})">
+                        ${evt.source_badge || '🌐 ' + (evt.source_name || 'Sumber Berita')} ↗
+                    </a>
+                ` : '';
+
+                const sourceRowHtml = evt.source_url ? `
+                    <div class="evt-source-row">
+                        <span style="color:var(--text-muted);">📰 Sumber Berita:</span>
+                        <a href="${evt.source_url}" target="_blank" rel="noopener noreferrer" class="evt-source-link">
+                            ${evt.source_name} <span style="font-size:0.7rem; color:var(--text-muted);">(${evt.source_domain})</span> ↗
+                        </a>
+                    </div>
+                ` : '';
+
                 card.innerHTML = `
                     <div>
                         <div class="evt-header">
-                            <span class="net-badge net-doge" style="font-size:0.65rem;">📌 ${evt.category}</span>
+                            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                                <span class="net-badge net-doge" style="font-size:0.65rem;">📌 ${evt.category}</span>
+                                ${newsLinkHtml}
+                            </div>
                             <span class="evt-time">⏱️ ${evt.timestamp}</span>
                         </div>
                         <div class="evt-title">${evt.title}</div>
                         <div class="evt-summary">${evt.summary}</div>
+                        ${sourceRowHtml}
                     </div>
                     <div>
                         <div style="margin-bottom:8px; font-size:0.78rem;">
