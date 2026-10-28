@@ -120,6 +120,10 @@ class EventCatalystAnalyzer:
                 "impact_rating": "TINGGI 🔥",
                 "target_coins": ["BTC", "PEPE", "DOGE", "FLOKI"],
                 "summary": "Arus masuk dana institusional BTC ETF meningkat drastis +$450M dalam 24 jam. Mendorong sentimen bullish masif ke seluruh sektor meme coin.",
+                "source_name": "CoinDesk",
+                "source_domain": "coindesk.com",
+                "source_badge": "🌐 CoinDesk",
+                "source_url": "https://www.coindesk.com/markets/",
                 "historical_match": {
                     "matched_event": "Persetujuan Spot BTC ETF & Arus Masuk Institusi (Januari 2024)",
                     "similarity_score": 94.5,
@@ -137,6 +141,10 @@ class EventCatalystAnalyzer:
                 "impact_rating": "TINGGI 🔥",
                 "target_coins": ["WIF", "BOME", "BONK", "SLERF"],
                 "summary": "Dompet Smart Money mencatat akumulasi masif pada ekosistem Solana Meme. Menandakan potensi rali lonjakan dalam 1-3 hari ke depan.",
+                "source_name": "Cointelegraph",
+                "source_domain": "cointelegraph.com",
+                "source_badge": "⚡ Cointelegraph",
+                "source_url": "https://cointelegraph.com/category/market-news",
                 "historical_match": {
                     "matched_event": "Akumulasi Dompet Whale Besar On-Chain (>10,000 SOL / 1,000 ETH)",
                     "similarity_score": 91.2,
@@ -154,6 +162,10 @@ class EventCatalystAnalyzer:
                 "impact_rating": "SEDANG ⚡",
                 "target_coins": ["FLOKI", "NEIRO", "BRETT"],
                 "summary": "Perbincangan komunitas di X & Telegram melonjak tajam terkait pengumuman pasangan spot trading baru di bursa utama.",
+                "source_name": "Decrypt",
+                "source_domain": "decrypt.co",
+                "source_badge": "📰 Decrypt",
+                "source_url": "https://decrypt.co/news",
                 "historical_match": {
                     "matched_event": "Listing Koin Meme di Binance & CEX Utama (Mei 2023 / Maret 2024)",
                     "similarity_score": 88.7,
@@ -171,6 +183,10 @@ class EventCatalystAnalyzer:
                 "impact_rating": "SEDANG ⚡",
                 "target_coins": ["BTC", "DOGE", "SHIB"],
                 "summary": "Terjadi fluktuasi jangka pendek akibat penyesuaian pasar jelang pengumuman data inflasi AS. Sifat koreksi bersifat sementara.",
+                "source_name": "The Block",
+                "source_domain": "theblock.co",
+                "source_badge": "📊 The Block",
+                "source_url": "https://www.theblock.co/category/markets",
                 "historical_match": {
                     "matched_event": "Likuidasi Masif Posisi Leverage & Pullback Makro (Agustus 2024)",
                     "similarity_score": 85.0,
