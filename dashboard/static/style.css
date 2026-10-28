@@ -1254,7 +1254,59 @@ body {
     font-size: 0.82rem;
     color: var(--text-muted);
     line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.news-source-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(0, 229, 255, 0.12);
+    border: 1px solid rgba(0, 229, 255, 0.35);
+    color: var(--accent-cyan);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.news-source-badge:hover {
+    background: rgba(0, 229, 255, 0.25);
+    border-color: var(--accent-cyan);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.evt-source-row {
+    margin-top: 8px;
     margin-bottom: 12px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    font-size: 0.76rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.evt-source-link {
+    color: var(--accent-cyan);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.evt-source-link:hover {
+    color: var(--accent-green);
+    text-decoration: underline;
 }
 
 .hist-match-box {
